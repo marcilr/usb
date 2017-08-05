@@ -1,0 +1,183 @@
+rename.txt
+Created Wed Jan 11 09:49:52 AKST 2017
+Copyright (C) 2017 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+Rename USB Drive
+
+
+Identify your Partition
+=======================
+Plug in your USB device and list your partitions with:
+# fdisk -l
+
+You can also list your mounted devices and their descriptions with:
+# mount
+
+Or use parted:
+# parted -l
+
+--ubuntu.com
+
+
+Using the Partition Editor
+==========================
+The file manager (Nautilus) currently does not support renaming disk
+partitions, but Gnome's Partition Editor (GParted) does.  To change a
+partition's label, follow these directions.  (Be careful using Partition
+Editor, as it's capable of making your computer completely unusable if you do
+the wrong thing.)
+
+1. Open the System > Administration menu and see if there's an entry for
+   GParted (previously Partition Editor).
+
+2. If there is, launch it.  If there isn't, install the "gparted" package
+   and it should now appear in the menu. Enter your password when prompted.
+
+3. Disk drives are divided up into partitions.  To find the partition you want
+   to re-label, you first have to find the disk drive that contains it, using
+   the drop-down menu in the upper right.  It will show a device name like
+   /dev/sdb and the drive's total size in parentheses.  After selecting a
+   drive, you will see a list of all partitions on that drive.
+
+4. If the partition is mounted (has a key icon next to it), right-click on the
+   partition and select Unmount.
+
+5. With the key icon gone, right-click on the partition and select Label.
+   If you can't select it, install the ntfsprogs package.
+
+6. Enter the new partition name and press Ok.
+
+7. The label change is now pending, but has not been completed.  Press the
+   Apply button near the top of the window.  After confirming, it should say
+   "All operations successfully completed".  The drive now has a new label.
+
+
+Using the Command line
+======================
+There are at least 6 separate command line tools used to label a
+partition - the program used depends on the partition's filesystem type:
+
+1. For FAT16 and FAT32 partitions, use mlabel from the mtools package.
+
+Check the current label
+  # mlabel -i <device> -s ::
+    example:
+  # mlabel -i /dev/sdb1 -s ::
+
+Change the label:
+  After unmounting and checking the current label (above), use:
+  # mlabel -i <device> ::<label>
+
+    example:
+
+  # mlabel -i /dev/sdb1 ::my_external
+
+2. For NTFS partitions, use ntfslabel from the ntfs-3g package.
+
+Check the current label:
+  # ntfslabel <device>
+
+    example:
+
+ # ntfslabel /dev/sdb1
+
+Change the label:
+  Note: 128 characters maximum.
+
+  # ntfslabel <device> <label>
+
+    example:
+
+  # ntfslabel /dev/sdb1 ntfs
+
+3. For ext2, ext3, or ext4 partitions, use e2label.
+Check the current label:
+  e2label <device>
+    example:
+  e2label /dev/sdb1
+
+Change the label:
+  Note: 16 characters maximum.
+
+  # e2label <device> <label>
+
+    example:
+
+  # e2label /dev/sdb2 ext4
+
+4. For JFS partitions, use jfs_tune.
+Check the current label
+  # jfs_tune -l <device>
+
+    example:
+
+  # jfs_tune /dev/sdb1
+
+Change the label:
+  Note: 16 characters maximum.
+
+  # jfs_tune -L <label> <device>
+
+    example:
+
+  # jfs_tune -L my_external /dev/sdb1
+
+5. For ReiserFS (v3) partitions, use reiserfstune.
+Change the label:
+  Note: 16 characters maximum.
+
+  # reiserfstune -l <label> <device>
+
+    example:
+
+  # reiserfstune -l my_external /dev/sdb1
+
+6. For XFS partitions, use xfs_admin
+Check the current label:
+  # xfs_admin -l <device>
+
+    example:
+
+  # xfs_admin -l /dev/sdb1
+
+Change the label:
+  Note: 12 characters maximum.
+
+  # xfs_admin -L <label> <device>
+
+    example:
+
+  # xfs_admin -l my_external /dev/sdb1
+
+--ubunutu.com
+
+
+Verify the change
+=================
+Now for the easiest part: unplug the drive, wait a second, then plug it back
+in.  It should appear on your desktop with the new label and have its new mount
+point.
+
+Without unplugging and having the device remount, you can also just run:
+
+# blkid
+
+
+Install Labeling Program
+========================
+# apt-get install mtools
+# apt-get install ntfsprogs
+# apt-get install e2fsprogs
+# apt-get install jfsutils
+# apt-get install reiserfsprogs
+# apt-get install xfsprogs
+--ubuntu.com
+
+
+
+Links
+=====
+RenameUSBDrive
+ubuntu documentation
+https://help.ubuntu.com/community/RenameUSBDrive
