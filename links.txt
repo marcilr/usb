@@ -21,3 +21,18 @@ http://unix.stackexchange.com/questions/30322/how-do-i-partition-a-usb-drive-so-
 RenameUSBDrive
 ubuntu documentation
 https://help.ubuntu.com/community/RenameUSBDrive
+
+Silicon Power Launches Mobile C50 USB Drive with USB Type-A, Micro-B and Type-C
+by Anton Shilov on July 27, 2017 5:00 PM EST
+This week Silicon Power has announced a rather unique series of
+USB flash drives.  Dubbed the Mobile C50, the Swiss army knife-type
+USB flash drive is a 3-in-1 drive that features all three major types
+of USB connectors, and as a result can be used with virtually all USB
+host devices from PCs to smartphones.  The drives come with up to
+128 GB capacity along with additional software to make them further
+compatible with mobile devices.
+http://www.anandtech.com/show/11671/silicon-power-launches-mobile-c50-usb-drive-with-usb-typea-microb-and-typec
+https://www.theverge.com/circuitbreaker/2017/7/28/16055780/silicon-power-mobile-c50-flash-drive-usb-a-c-micro-all-in-one
+
+USB Type C Male to USB Type A Female OTG Aluminum Adapter
+https://www.walmart.com/ip/USB-Type-C-Male-to-USB-Type-A-Female-OTG-Aluminum-Adapter/536983480?wmlspartner=wlpa&selectedSellerId=6370&adid=22222222227077729952&wmlspartner=wmtlabs&wl0=&wl1=g&wl2=c&wl3=189874536380&wl4=aud-310687322322:pla-293526217582&wl5=9060448&wl6=&wl7=&wl8=&wl9=pla&wl10=114501637&wl11=online&wl12=536983480&wl13=&veh=sem
