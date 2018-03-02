@@ -11,6 +11,12 @@ docs/
 links.txt
   USB related links
 
+manifest
+  Manifest for resync application
+
+sandisk/
+  SanDisk USB products
+
 usb.txt
   USB
 
