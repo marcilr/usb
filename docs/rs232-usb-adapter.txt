@@ -1,0 +1,142 @@
+rs232-usb-adapter.txt
+Created Tue Mar 25 08:31:10 AKDT 2014
+Copyright (C) 2014 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+RS232 DB9 female to usb adapter.
+
+FTDI USB Serial Device converter 
+
+The linux kernel automatically recognized the FTDI chipset
+and creates /sys/class/tty/ttyUSB0/ and /dev/ttyUSB0 without issue.
+Used with minicom to access the GCI WTI box (9600 8N1) to configure
+dhcp.  Good stuff.
+
+Connect via minicom to /dev/ttyUSB0:
+  $ sudo minicom --device /dev/ttyUSB0   <=== Ubuntu syntax
+
+On covellite debian wheezy amd64 7.t this runs minicom 2.6.1
+
+Quit minicom:
+  Press and hold the 'CTRL' key and then press the 'A' key.
+  Release the keys and press either 'X' or 'Q' letter to exit out of Minicom.
+
+
+Got ftdi module:
+
+covellite:~# lsmod | grep usbserial
+usbserial              32061  1 ftdi_sio
+usbcore               128741  6 ehci_hcd,usbhid,usb_storage,usbserial,ftdi_sio
+covellite:~#
+
+
+On connection to covellite debian wheezy amd64 7.4 workstation:
+
+$ dmesg
+...
+[62544.674281] usb 1-1.6: reset low-speed USB device number 18 using ehci_hcd
+[63068.513353] usb 1-1.5: new full-speed USB device number 19 using ehci_hcd
+[63068.612951] usb 1-1.5: New USB device found, idVendor=0403, idProduct=6001
+[63068.612957] usb 1-1.5: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[63068.612962] usb 1-1.5: Product: USB FAST SERIAL ADAPTER
+[63068.612966] usb 1-1.5: Manufacturer: FTDI
+[63068.612969] usb 1-1.5: SerialNumber: FTOQBRRM
+[63068.713432] usbcore: registered new interface driver usbserial
+[63068.713448] USB Serial support registered for generic
+[63068.713479] usbcore: registered new interface driver usbserial_generic
+[63068.713480] usbserial: USB Serial Driver core
+[63068.720935] USB Serial support registered for FTDI USB Serial Device
+[63068.721007] ftdi_sio 1-1.5:1.0: FTDI USB Serial Device converter detected
+[63068.721059] usb 1-1.5: Detected FT232RL
+[63068.721062] usb 1-1.5: Number of endpoints 2
+[63068.721064] usb 1-1.5: Endpoint 1 MaxPacketSize 64
+[63068.721067] usb 1-1.5: Endpoint 2 MaxPacketSize 64
+[63068.721069] usb 1-1.5: Setting MaxPacketSize 64
+[63068.721415] usb 1-1.5: FTDI USB Serial Device converter now attached to ttyUSB0
+[63068.721440] usbcore: registered new interface driver ftdi_sio
+[63068.721443] ftdi_sio: v1.6.0:USB FTDI Serial Converters Driver
+$
+
+Looks like it is identified.
+
+On removal get:
+
+$ dmesg
+...
+[64028.979733] usb 1-1.6: USB disconnect, device number 18
+[64029.248956] usb 1-1.6: new low-speed USB device number 20 using ehci_hcd
+[64029.345910] usb 1-1.6: New USB device found, idVendor=045e, idProduct=0040
+[64029.345918] usb 1-1.6: New USB device strings: Mfr=1, Product=3, SerialNumber=0
+[64029.345925] usb 1-1.6: Product: Microsoft 3-Button Mouse with IntelliEye(TM)
+[64029.345930] usb 1-1.6: Manufacturer: Microsoft
+[64029.348971] input: Microsoft Microsoft 3-Button Mouse with IntelliEye(TM) as /devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.6/1-1.6:1.0/input/input21
+[64029.349337] generic-usb 0003:045E:0040.000E: input,hidraw0: USB HID v1.10 Mouse [Microsoft Microsoft 3-Button Mouse with IntelliEye(TM)] on usb-0000:00:1a.0-1.6/input0
+[64112.227214] usb 1-1.5: USB disconnect, device number 19
+[64112.227402] ftdi_sio ttyUSB0: FTDI USB Serial Device converter now disconnected from ttyUSB0
+[64112.227432] ftdi_sio 1-1.5:1.0: device disconnected
+$
+
+Noticed that /sys/class/tty/ttyUSB0/ and /dev/ttyUSB0 also disappear.
+
+
+covellite:~# ls /sys/class/tty/ttyUSB0/
+dev  device  power  subsystem  uevent
+covellite:~#
+
+covellite:~# ls -l /dev/ttyUSB0 
+crw-rw---T 1 root dialout 188, 0 Mar 25 08:36 /dev/ttyUSB0
+covellite:~#
+
+
+Privileges
+==========
+For privileges I used:
+
+covellite:~# chmod a+rw /dev/ttyUSB0
+
+covellite:~# adduser marcilr dialout
+Adding user `marcilr' to group `dialout' ...
+Adding user marcilr to group dialout
+Done.
+covellite:~#
+
+
+Now the problem is that when the second tries to use a device ttyUSB0 the]
+following error is returned:
+  "Could not open serial port /dev/ttyUSB0"
+
+I was able to fix it by using:
+  sudo chown :second_user /dev/ttyUSB0
+
+or
+
+  sudo adduser MyUser dialout
+  sudo chmod a+rw /dev/ttyUSB0
+
+As you've noticed, the /dev/ttyUSB0 device has the group of dialout.
+All you need to do is add the second user to the dialout group:
+  sudo adduser second_user dialout
+	
+askubuntu.com/
+
+
+
+
+Links
+=====
+FTDI Products
+Mouser Electronics
+http://www.mouser.com/search/refine.aspx?N=4294950629
+
+How do I access a USB serial port without an entry in /dev?
+http://unix.stackexchange.com/questions/42844/how-do-i-access-a-usb-serial-port-without-an-entry-in-dev
+
+How do I allow a non-default user to use serial device ttyUSB0?
+http://askubuntu.com/questions/112568/how-do-i-allow-a-non-default-user-to-use-serial-device-ttyusb0
+
+How to connect to a terminal to Serial-USB device on ubuntu 10.10?
+http://stackoverflow.com/questions/5347962/how-to-connect-to-a-terminal-to-serial-usb-device-on-ubuntu-10-10
+
+USB RS232 Cables
+USB to serial RS232 Converters
+http://www.ftdichip.com/Products/Cables/USBRS232.htm
