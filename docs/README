@@ -1,10 +1,24 @@
 README
-Created Wed Jan 11 09:48:40 AKST 2017
-Copyright (C) 2017 by Raymond E. Marcil <marcilr@gmail.com>
+Created Tue Mar 25 15:13:39 AKDT 2014
+Copyright (C) 2014 by Raymond E. Marcil <marcilr@gmail.com>
 
 
 Filelist
 ========
+automount.txt
+
+rs232-usb-adapter.txt
+  RS232 DB9 female to usb adapter.
+  FTDI USB Serial Device converter
+  The linux kernel under Debian wheezy amd64 7.4 sees the FTDI chipset
+  without issue.	
+
 rename.txt
   Rename USB drive
   https://help.ubuntu.com/community/RenameUSBDrive
+
+usb-keyboard.txt
+usb-key-rename.txt
+usb-key.txt
+usb-mass-storage.txt
+usb-mouse.txt
