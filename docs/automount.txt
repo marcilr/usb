@@ -1,0 +1,17 @@
+automount.txt
+Created Fri Jan  3 07:56:09 AKST 2014
+Copyright (C) 2014 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+Automount usb keys
+
+Working on new GCI debian wheezy 7.3 installation.  Initially automounting
+usb keys did not work.  Had to manually mount as root.  Then it magically
+started working.  Don't know what was up with that.
+
+
+Links
+=====
+Automounting USB sticks on Debian
+Some good details here
+http://unix.stackexchange.com/questions/24731/automounting-usb-sticks-on-debian
