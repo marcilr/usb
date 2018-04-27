@@ -1,0 +1,266 @@
+usb-mass-storage.txt
+Created Mon Dec 18 21:01:40 AKST 2006
+by Raymond E. Marcil
+
+
+With the purchase of an AcomData 509 series external 
+hard drive case I'm checking out how to mount
+a 120GB WD1200JB drive via USB. Think this is cracking
+the USB Mass Storage Device (MSD) nut for Linux.
+
+Checking for udev
+=================
+On malachite:
+
+dpkg -l | grep udev
+ii  udev           0.056-3        /dev/ management daemon
+
+udev appears to be installed on malachite. Not sure how to
+configure it yet.
+
+In Linux 2.6.18 config on malchite I have:
+ 
+Device Drivers 
+ --> USB Support
+ --> USB Mass Storage support
+
+Selected.
+
+
+Check Config:
+============
+Checking for USB mass storage support on malachite.
+
+No drive connected:
+------------------
+dmesg | grep -i usb
+...
+Initializing USB Mass Storage driver...
+usbcore: registered new driver usb-storage
+USB Mass Storage support registered.
+
+With drive connected:
+--------------------
+dmesg | grep -i usb
+usbcore: registered new driver usbfs
+usbcore: registered new driver hub
+usbmon: debugfs is not available
+ehci_hcd 0000:00:04.2: new USB bus registered, assigned bus number 1
+ehci_hcd 0000:00:04.2: USB 2.0 started, EHCI 1.00, driver 10 Dec 2004
+usb usb1: configuration #1 chosen from 1 choice
+hub 1-0:1.0: USB hub found
+Initializing USB Mass Storage driver...
+usbcore: registered new driver usb-storage
+USB Mass Storage support registered.
+usb 1-2: new high speed USB device using ehci_hcd and address 3
+usb 1-2: configuration #1 chosen from 1 choice
+scsi4 : SCSI emulation for USB Mass Storage devices
+usb-storage: device found at 3
+usb-storage: waiting for device to settle before scanning
+usb 1-2: reset high speed USB device using ehci_hcd and address 3
+usb 1-2: reset high speed USB device using ehci_hcd and address 3
+usb 1-2: reset high speed USB device using ehci_hcd and address 3
+usb 1-2: reset high speed USB device using ehci_hcd and address 3
+usb-storage: device scan complete
+
+Now need to identify SCSI device on malachite (I think):
+
+RAID1: /dev/md0 ==> sdb1, sda1
+
+
+Check partitions
+================
+cuprite:# cat /proc/partitions 
+major minor  #blocks  name
+
+   3     0   39088896 hda
+   3     1   19053058 hda1
+   3     2          1 hda2
+   3     5     128488 hda5
+   3     6   19904503 hda6
+   8     0  117220824 sda
+   8     1  117218241 sda1 <== USB MSD for cuprite
+
+The cat of /proc/partitions works on cuprite to spot
+USB MSD. Likely works on malachite if drive connected.
+Noticed that it can take replugging the USB drive to 
+make /dev/sda appear.
+
+
+Check /proc
+===========
+ls /proc/bus/usb/
+001  devices
+
+ls /proc/bus/usb/001/
+001  004               # These files are binary.
+
+
+cat /proc/bus/usb/devices
+
+T:  Bus=01 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=480 MxCh= 5
+B:  Alloc=  0/800 us ( 0%), #Int=  0, #Iso=  0
+D:  Ver= 2.00 Cls=09(hub  ) Sub=00 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=0000 ProdID=0000 Rev= 2.06
+S:  Manufacturer=Linux 2.6.18 ehci_hcd
+S:  Product=EHCI Host Controller
+S:  SerialNumber=0000:00:04.2
+C:* #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=  0mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
+E:  Ad=81(I) Atr=03(Int.) MxPS=   2 Ivl=256ms
+
+T:  Bus=01 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  4 Spd=480 MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=55aa ProdID=2b00 Rev= 1.00
+S:  Manufacturer= 
+S:  Product=USB 2.0 CF/ HDD
+S:  SerialNumber=0104C01479F1
+C:* #Ifs= 1 Cfg#= 1 Atr=c0 MxPwr=  0mA
+I:  If#= 0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=usb-storage
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+
+The last entry looks promising.
+
+lspci
+=====
+To display USB controller use lspci -v.
+
+0000:00:04.2 USB Controller: NEC Corporation USB 2.0 (rev 04) (prog-if 20 [EHCI])
+        Subsystem: D-Link System Inc: Unknown device f101
+        Flags: bus master, medium devsel, latency 64, IRQ 22
+        Memory at fe5fbc00 (32-bit, non-prefetchable) [size=256]
+        Capabilities: [40] Power Management version 2
+
+The above is on malachite. Looks like it has an EHCI controller.
+
+
+/dev entries
+============
+When I compar "ls -R1 /dev" with the WD1200JB hard drive
+connected and not connected the only difference is the 
+entry /dev/usbdev1.3. This must be the hard drive or
+controller. However when I plug the drive back in it
+changes to /dev/usbdev1.4. Needs analysis.
+
+
+Get the udev info for your USB device
+-------------------------------------
+From googling determined how to get udev info.
+from: archlinux.org/
+
+# udevinfo -a -p `udevinfo -q path -n /dev/usbdev1.4                       `
+
+udevinfo starts with the device the node belongs to and then walks up the
+device chain, to print for every device found, all possibly useful attributes
+in the udev key format.
+Only attributes within one device section may be used together in one rule,
+to match the device for which the node will be created.
+
+device '/sys/class/usb_device/usbdev1.4' has major:minor 189:3
+  looking at class device '/sys/class/usb_device/usbdev1.4':
+    SUBSYSTEM="usb_device"
+    SYSFS{dev}="189:3"
+
+follow the class device's "device"
+  looking at the device chain at '/sys/devices/pci0000:00/0000:00:04.2/usb1/1-2'                       :
+    BUS="usb"
+    ID="1-2"
+    DRIVER="usb"
+    SYSFS{bConfigurationValue}="1"
+    SYSFS{bDeviceClass}="00"
+    SYSFS{bDeviceProtocol}="00"
+    SYSFS{bDeviceSubClass}="00"
+    SYSFS{bMaxPacketSize0}="64"
+    SYSFS{bMaxPower}="  0mA"
+    SYSFS{bNumConfigurations}="1"
+    SYSFS{bNumInterfaces}=" 1"
+    SYSFS{bcdDevice}="0100"
+    SYSFS{bmAttributes}="c0"
+    SYSFS{devnum}="4"
+    SYSFS{idProduct}="2b00"
+    SYSFS{idVendor}="55aa"
+    SYSFS{manufacturer}=" "
+    SYSFS{maxchild}="0"
+    SYSFS{product}="USB 2.0 CF/ HDD"
+    SYSFS{serial}="0104C01479F1"
+    SYSFS{speed}="480"
+    SYSFS{version}=" 2.00"
+
+
+Googling:
+========
+Searching for "udev acomdata" yields plenty of hits.
+
+From this I found:
+-----------------
+# dmesg | tail         <== This is the ticket to determine the device!
+sdc: Mode Sense: 0b 00 00 08
+sdc: assuming drive cache: write through
+SCSI device sdc: 234441648 512-byte hdwr sectors (120034 MB)
+sdc: Write Protect is off
+sdc: Mode Sense: 0b 00 00 08
+sdc: assuming drive cache: write through
+ sdc: unknown partition table
+sd 5:0:0:0: Attached scsi disk sdc
+sd 5:0:0:0: Attached scsi generic sg3 type 0
+usb-storage: device scan complete
+
+NOTE: If the sdN drive is not listed unplug the USB cable
+      and reattach to reset for correct operation.
+
+mkdosfs
+=======
+Top create a DOS partition on the USB drive use mkdosfs.
+
+# mkdosfs /dev/sdd1
+mkdosfs 2.11 (12 Mar 2005)
+# mount /dev/sdd1 /mnt
+
+
+fdisk USB MSD:
+--------------
+# fdisk /dev/sdc
+Command (m for help): p
+
+Disk /dev/sdc: 120.0 GB, 120034123776 bytes
+255 heads, 63 sectors/track, 14593 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+   Device Boot      Start         End      Blocks   Id  System
+
+Wow! This sure looks like the WD1200JB.
+
+Created new Linux partition:
+Command (m for help): p
+
+Disk /dev/sdc: 120.0 GB, 120034123776 bytes
+255 heads, 63 sectors/track, 14593 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdc1               1       14593   117218241   83  Linux
+
+Command (m for help): w
+
+format USB MSD:
+--------------
+# mkreiserfs /dev/sdc1
+
+mount USB MSD:
+-------------
+# mount /dev/sdc1 /mnt
+
+
+
+Links:
+=====
+HOWTO USB Mass Storage Device
+http://gentoo-wiki.com/HOWTO_USB_Mass_Storage_Device
+
+USB Mass Storage Devices
+http://www.fraw.org.uk/download/cltc/cltc_bb-01.html
+
+Using udev to map multiple entries to a device
+http://wiki.archlinux.org/index.php/\
+  Using_udev_to_map_multiple_entries_to_a_device
