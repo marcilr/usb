@@ -1,0 +1,298 @@
+usb-key.txt
+Created Thu Nov 17 14:01:30 AKST 2005
+by Raymond E. Marcil
+
+
+
+I've been looking into storing password on a USB key
+and looking for ideas. It striked me there was a Linux
+journal article on this topic not long ago.
+
+Linux Journal article:
+  Two-Factor Authentication (September?)
+
+
+Thu Feb  9 16:15:23 AKST 2006
+I bought a Sandisk, Cruzer USB Flash Drive, 256MB, USB 2.0,
+at Best Buy on Sunday Jan. 29, 2006. It has a nice form factor
+and I'm working, even so slowly, on getting it up and
+operational.
+
+Check the Linux 2.6 kernel.
+
+Under menuconfig:
+  Device Drivers
+    ==> USB support
+        * USB device filesystem
+        * EHCI HCD (USB 2.0) support
+        * UHCI HCD (most Intel and VIA) support
+        * USB Mass Storage Support
+        * USB Human Interface Device (full HID) support
+        * HID input layer support
+        * USB Monitor
+
+flash disk under /proc:
+======================
+From /proc_usb_info.txt: "The usbfs filesystem for USB devices is
+traditionally mounted at /proc/bus/usb.  It provides the
+/proc/bus/usb/devices file, as well as the /proc/bus/usb/BBB/DDD
+files."
+
+Plugging in the flash drive at the work Dell Dimension 8200 
+workstation running Debian Sarge with Linux 2.6.15.1. Did a
+quick cat on /proc/bus/usb/devices:
+
+S:  Manufacturer=Linux 2.6.15.1 uhci_hcd
+S:  Product=UHCI Host Controller
+S:  SerialNumber=0000:00:1f.4
+...
+S:  Manufacturer=SanDisk Corporation
+S:  Product=Cruzer Micro
+S:  SerialNumber=2004452692161ed1e867
+...
+S:  Manufacturer=Linux 2.6.15.1 uhci_hcd
+S:  Product=UHCI Host Controller
+S:  SerialNumber=0000:00:1f.2
+...
+
+Looks like two UHCI USB controllers and the
+Sandisk flash drive.
+
+Upon inspecting the syslog on cuprite:
+Feb 28 16:36:25 cuprite kernel: usb 2-1: new full speed USB device using uhci_hcd and address 3
+Feb 28 16:36:25 cuprite kernel: scsi1 : SCSI emulation for USB Mass Storage devices
+Feb 28 16:36:25 cuprite kernel: usb-storage: device found at 3
+Feb 28 16:36:25 cuprite kernel: usb-storage: waiting for device to settle before scanning
+Feb 28 16:36:25 cuprite udev[18622]: creating device node '/dev/usbdev2.3'
+Feb 28 16:36:30 cuprite kernel:   Vendor: SanDisk   Model: Cruzer Micro      Rev: 0.1 
+Feb 28 16:36:30 cuprite kernel:   Type:   Direct-Access                      ANSI SCSI revision: 02
+Feb 28 16:36:30 cuprite kernel: SCSI device sda: 501759 512-byte hdwr sectors (257 MB)
+Feb 28 16:36:30 cuprite kernel: sda: Write Protect is off
+Feb 28 16:36:30 cuprite kernel: sda: Mode Sense: 03 00 00 00
+Feb 28 16:36:30 cuprite kernel: sda: assuming drive cache: write through
+Feb 28 16:36:30 cuprite kernel: SCSI device sda: 501759 512-byte hdwr sectors (257 MB)
+Feb 28 16:36:30 cuprite kernel: sda: Write Protect is off
+Feb 28 16:36:30 cuprite kernel: sda: Mode Sense: 03 00 00 00
+Feb 28 16:36:30 cuprite kernel: sda: assuming drive cache: write through
+Feb 28 16:36:30 cuprite kernel:  sda: sda1
+Feb 28 16:36:30 cuprite kernel: sd 1:0:0:0: Attached scsi removable disk sda
+Feb 28 16:36:30 cuprite kernel: sd 1:0:0:0: Attached scsi generic sg0 type 0
+Feb 28 16:36:30 cuprite kernel: usb-storage: device scan complete
+Feb 28 16:36:30 cuprite scsi.agent[18645]:      sd_mod: loaded sucessfully (for disk)
+Feb 28 16:36:30 cuprite udev[18660]: creating device node '/dev/sda'
+Feb 28 16:36:30 cuprite udev[18662]: creating device node '/dev/sg0'
+Feb 28 16:36:30 cuprite udev[18684]: creating device node '/dev/sda1'
+
+
+
+Mounting flash disk:
+===================
+The above looked very promising so tried:
+
+# mount /dev/sda1 /mnt
+# df -m
+Filesystem           1M-blocks      Used Available Use% Mounted on
+...
+/dev/sda1                  245         6       239   3% /mnt
+
+Yeh hah, this outright worked.
+
+To get the long windows filenames user vfat:
+# mount -t vfat /dev/sda1 /mnt
+
+/etc/fstab entry:
+=================
+  /dev/sda1   /sandisk    vfat   user,noauto,umask=0   0   0
+
+NOTE: The above worked *without* hotplug or udev installed.
+I have since installed hotplug and udev since I want to
+experiment with them.
+
+
+udev (automounting):
+===================
+Automounting the Cruzer with udev was a snap.
+I created a file named /etc/dev.d/block/sda1.dev
+and the key now just mounts. See links for storing
+passwords for storing passwords on USB key and
+keyloader. 
+
+Stored files under:
+  /usr/local/src/00TARBALLS/utils/keyload
+
+/etc/dev.d/block/sda1.dev:
+=========================
+#!/bin/bash
+# sda1.dev
+# Created Thu Mar 16 16:28:40 AKST 2006
+# by Raymond E. Marcil
+#
+# First attempt at writing a rule for udev to mount
+# the Cruser USB flash key. For source of ideas 
+# see: /usr/local/src/00TARBALLS/utils/keyload/README
+#
+# The name of this file does not matter. Look like
+# all the files in this directory are executed for
+# udev events. 
+#
+
+exec >> /tmp/test.txt 2>&1
+
+PATH="/bin:/usr/bin"
+DEVICE="/dev/sda1"
+UMOUNT="/bin/umount"
+MOUNT="/bin/mount"
+# MOUNTP="/mnt/cryptkey"
+MOUNTO="-t vfat -o noatime,sync,dirsync,ro,nodev,noexec,nosuid"
+# Owner file, 8 chars for compability with older DOS fs
+OWNERF="keyowner"
+# USERSCRIPT="/usr/local/bin/keyload"
+
+echo "$0 started at `date` with action $ACTION and device $DEVNAME"
+
+if [ "x$DEVNAME" != "x$DEVICE" ]; then
+        echo "Device $DEVNAME is not the device we're looking for"
+        exit 0
+fi
+
+echo "Cruzer action at $DEVNAME"
+
+case "$ACTION" in
+add)
+  echo "Cruzer device added"
+  $MOUNT -t vfat /dev/sda1 /sandisk
+  ;;
+remove) 
+  echo "Crypt device removed"
+  $UMOUNT /sandisk
+  ;;
+esac
+
+echo "Done at `date`"
+echo ""
+
+exit 0
+
+
+Command line encryption:
+=======================
+Did a quick google for "linux command line encryption". This 
+yielded a nice hit:
+
+Re: Q: Linux Command Line Encryption
+
+    * This message: [ Message body ] [ More options ]
+    * Related messages: [ Next message ] [ Previous message ] [ In reply to ] [ Next in thread ]
+
+From: Janusz A. Urbanowicz <alex_at_bofh.net.pl>
+Date: Fri, 22 Oct 2004 19:44:05 +0200
+
+On Fri, Oct 22, 2004 at 05:48:26PM +0000, Ali Campbell wrote:
+> Hi there,
+>
+> Sorry for a question which I'm sure a lot of people on this list will
+> consider trivial, but I'm subscribed, so I might as well ask it here.
+>
+> I need a Linux utility which I can use to encrypt a single gzipped file
+> via the command line. Obviously something open source would be
+> preferable. I'm not really interested in setting up a whole suite of
+> stuff with keyfiles and so on, and I don't need a public/private key
+> setup, just something quick and dirty with a single secret key for
+> encryption and decryption which is nevertheless reasonably strong.
+
+gpg -c, mcrypt
+
+alex
+
+URL: http://seclists.org/lists/fulldisclosure/2004/Oct/0966.html
+
+Thu Feb  9 16:53:54 AKST 2006 (rem)
+The gpg utility looks to be installed by default under 
+Debian Sarge.
+
+
+PAM_USB:
+=======
+Slashdot: Authentication Tokens for Password-less Access? 
+          http://ask.slashdot.org/article.pl?sid=05/09/\
+            23/2230206&tid=198&tid=172&tid=4
+
+PAM_USB: http://www.pamusb.org/
+Wow, (as the AC top-level poster) this is exactly
+what I was looking for... (mod parent up)!
+
+* Unix/Linux Support (in this case, with a pam_module)
+* Uses a generically mountable device (ie: usb flash
+  disk) and monitors dmesg for automated proceedure
+* Works with login (kdm)
+
+pam_usb docs:
+  Quickstart http://www.pamusb.org/quickstart.html
+     Options http://www.pamusb.org/options.html
+
+From http://linux.softpedia.com:
+"pam_usb is a PAM modules that enables either two-factor
+or password-less authentication using an USB storage device
+(such as an USB Flash Memory Token).
+
+It can work with any PAM enabled program, such as login,
+su, gdm/kdm/xdm, xlock...
+
+This is done with a pair of DSA keys, the private one is
+stored on the device and the public one on the computer.
+
+Whenever a user tries to authenticate, pam_usb will try
+to find the usb device and will load the private key.
+
+Then it will compute a private/public key signing challenge
+using the public key contained in the user's home directory.
+
+Then, if configured in two-factor mode (additional mode, in
+the documentation), a password is asked to the user in order
+to finish the authentication. Otherwise, if configured in
+password-less mode (alternative / unique in the documentation)
+it will log in the user without asking any password.
+
+It can also work using any kind of mountable devices such
+as floppy disks or cd-roms. To improve security, it supports
+private key encryption and serial number access list.
+
+docs:
+====
+/proc/bus/usb filesystem output:
+   /usr/src/linux-2.6.15.1/Documentation/usb/proc_usb_info.txt
+
+
+links:
+=====
+
+PAM documentation website:
+  http://www.kernel.org/pub/linux/libs/pam/Linux-PAM-html/pam.html
+
+The blackdog USB computer:
+  http://www.projectblackdog.com/product.html
+
+Cryptocard: 
+  http://www.cryptocard.com/index.cfm?PID=464&\
+    PageName=UB-1%20USB%20Token
+  http://www.cryptocard.com/index.cfm?PID=376&\
+    PageName=CRYPTO-Server
+
+iButton:
+  http://www.ibutton.com/
+
+Linux USB:
+  http://www.linux-usb.org/
+
+Booting Linux off of a USB drive:
+  http://www.simonf.com/usb/
+
+Storing passwords on USB key:
+  http://www-inf.int-evry.fr/~olberger/weblog/2005/08/23/\
+    storing-passwords-on-usb-key/
+
+Script keyloader files (from passwords on USB key page):
+  http://www.hardeman.nu/~david/keyload/
+
+Testing Commercial 2-Factor Authentication Systems?
+http://ask.slashdot.org/askslashdot/07/01/26/0540243.shtml
