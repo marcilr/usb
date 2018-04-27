@@ -13,6 +13,7 @@ Linux Journal article:
 
 
 Thu Feb  9 16:15:23 AKST 2006
+=============================
 I bought a Sandisk, Cruzer USB Flash Drive, 256MB, USB 2.0,
 at Best Buy on Sunday Jan. 29, 2006. It has a nice form factor
 and I'm working, even so slowly, on getting it up and
@@ -31,7 +32,8 @@ Under menuconfig:
         * HID input layer support
         * USB Monitor
 
-flash disk under /proc:
+
+flash disk under /proc
 ======================
 From /proc_usb_info.txt: "The usbfs filesystem for USB devices is
 traditionally mounted at /proc/bus/usb.  It provides the
@@ -84,8 +86,7 @@ Feb 28 16:36:30 cuprite udev[18662]: creating device node '/dev/sg0'
 Feb 28 16:36:30 cuprite udev[18684]: creating device node '/dev/sda1'
 
 
-
-Mounting flash disk:
+Mounting flash disk
 ===================
 The above looked very promising so tried:
 
@@ -100,7 +101,8 @@ Yeh hah, this outright worked.
 To get the long windows filenames user vfat:
 # mount -t vfat /dev/sda1 /mnt
 
-/etc/fstab entry:
+
+/etc/fstab entry
 =================
   /dev/sda1   /sandisk    vfat   user,noauto,umask=0   0   0
 
@@ -109,7 +111,7 @@ I have since installed hotplug and udev since I want to
 experiment with them.
 
 
-udev (automounting):
+udev (automounting)
 ===================
 Automounting the Cruzer with udev was a snap.
 I created a file named /etc/dev.d/block/sda1.dev
@@ -120,7 +122,8 @@ keyloader.
 Stored files under:
   /usr/local/src/00TARBALLS/utils/keyload
 
-/etc/dev.d/block/sda1.dev:
+
+/etc/dev.d/block/sda1.dev
 =========================
 #!/bin/bash
 # sda1.dev
@@ -174,7 +177,7 @@ echo ""
 exit 0
 
 
-Command line encryption:
+Command line encryption
 =======================
 Did a quick google for "linux command line encryption". This 
 yielded a nice hit:
@@ -211,7 +214,7 @@ The gpg utility looks to be installed by default under
 Debian Sarge.
 
 
-PAM_USB:
+PAM_USB
 =======
 Slashdot: Authentication Tokens for Password-less Access? 
           http://ask.slashdot.org/article.pl?sid=05/09/\
@@ -257,13 +260,13 @@ It can also work using any kind of mountable devices such
 as floppy disks or cd-roms. To improve security, it supports
 private key encryption and serial number access list.
 
-docs:
+docs
 ====
 /proc/bus/usb filesystem output:
    /usr/src/linux-2.6.15.1/Documentation/usb/proc_usb_info.txt
 
 
-links:
+Links
 =====
 
 PAM documentation website:
