@@ -1,0 +1,81 @@
+usb-key-rename.txt
+Created Thu Sep  5 15:50:37 AKDT 2013
+Copyright (C) 2013 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+USB Key Rename
+
+
+Get list of drives connected to computer:
+
+# blkid
+/dev/sda5: UUID="a400441f-2413-4295-9c7c-4398e7584362" TYPE="swap" 
+/dev/sda1: UUID="62a4de0b-59da-4f49-9a23-b8c5bf1b05b6" TYPE="ext3" SEC_TYPE="ext2" 
+/dev/sdb: SEC_TYPE="msdos" LABEL="Debian Inst" UUID="DEB0-0001" TYPE="vfat
+#
+
+NOTE: /dev/sdb is the usb key.
+
+Force unmount
+=============
+Use:
+
+# umount -l /media/<usb device>
+
+Example:
+# umount -l /media/Debian\ Inst/
+
+
+FAT32
+=====
+Since the 80s, portable media like floppy disks have used FAT.  To date it is
+probably the most common file system type and is support by almost all
+operating systems.  Therefore if you own a USB device, it's probably using FAT
+and you can change the device label (name) with the following command:
+
+mlabel -i /dev/sdb1 ::Camera
+
+Usually mlabel requires you to specify a DOS style drive letter, like :C or :F
+but here we're using a special device :: which allows us to specify a UNIX
+style device name.  Replace Camera with your own device name. :!: If you get
+an error like "Total number of sectors (7831520) not a multiple of sectors per
+track (63)!" then add a line of code to your mtools configuration file using
+the following command:
+
+sinisterstuf.org/
+
+mtools - Tools for manipulating MSDOS files
+
+
+NTFS
+====
+This is a Windows filesystem and is usually used for the hard disk drive in
+your computer or on large USB devices where you expect to store files bigger
+than 4GB, a size limitation in FAT.  You can rename these kinds of drives
+using:
+
+ntfslabel /dev/sdb1 movie_drive
+
+sinisterstuf.org/
+
+
+EXT
+===
+The first filesystem created specifically for Linux, EXT is a fast journalling
+filesystem used by most distributions of GNU/Linux.  Rename these kinds of
+filesystems like this:
+
+e2label /dev/sdb1 live-usb
+echo mtools_skip_check=1 >> ~/.mtoolsrc
+
+sinisterstuf.org/
+
+
+Use e2label, like this: e2label device newlabel
+
+
+
+Links
+=====
+Renaming USB Devices in Linux
+http://www.sinisterstuf.org/blog/345/renaming-usb-devices-in-linux
