@@ -1,0 +1,52 @@
+usb-mouse.txt
+Created Fri Nov 11 08:18:58 AKST 2005
+by Raymond E. Marcil
+
+
+Working on getting USB mouse support up and
+operational. Note from the linux-usb.org 
+site.
+
+Turn on USB Human Interface Device (HID)
+support in the USB support and Mouse Support
+in the Input core support.
+
+In Linux 2.6.14 make menuconfig:
+
+Device Drivers -->
+  USB Support -->
+    USB Human Interface Device (HID) support
+
+/etc/X11/XF86Config:
+===================
+
+If you are using XFree86 version 4.0 or later,
+add a InputDevice section that looks like the
+following:
+
+Section "InputDevice"
+     Identifier  "USB Mice"
+     Driver      "mouse"
+     Option      "Protocol"   "IMPS/2"
+     Option      "Device"     "/dev/input/mice"
+EndSection
+
+or, if you want to use a wheel mouse, something like:
+
+Section "InputDevice"
+     Identifier  "USB Mice"
+     Driver      "mouse"
+     Option      "Protocol"   "IMPS/2"
+     Option      "Device"     "/dev/input/mice"
+     Option      "ZAxisMapping"   "4 5"
+     Option      "Buttons"        "5"
+EndSection
+
+
+Links:
+=====
+
+The Linux USB sub-system
+Chapter 2. How to get USB devices working under Linux
+USB Human Interface Device (HID) Configuration
+  http://www.linux-usb.org/USB-guide/x194.html
