@@ -1,0 +1,169 @@
+usb-keyboard.txt
+Created Fri Mar 23 11:00:35 ADT 2007
+by Raymond E. Marcil
+
+
+Happy Hacking Keyboard Lite 2 (HHKB Lite 2) USB keyboard.
+Now up and operational. Does not work off of the D-Link 
+DU-D520 USB card. Not sure whats up with that.
+
+The keyboard works just fine off the Supermicro 370DE6 
+USB port on the back of the workstation. Left BIOS
+PCIPnP | Legacy USB Support set to "AUTO".
+
+FIXME: Holding down the Delete key, to get to the bios
+on boot, does not work from the USB keyboard. Likely a
+370DE6 motherboard issue. i.e. Need to keep a PS/2 
+motherboard around. Likely need a new motherboard at 
+some point.
+
+Turned keyboard DIP switch 3 on to turn Delete key into
+BS (backspace) key. Still backspace key whether Fn key
+is help down or not.
+
+
+In Linux 2.6.19.1 make menuconfig:
+
+Device Drivers -->
+  USB Support -->
+    <*> Support for Host-side USB
+    [*]   USB device filesystem
+    [*]   EHCI HCD (USB 2.0) support
+    <*> USB Mass Storage support
+    [*]   SanDisk SDDR-09 (and other SmartMedia support (EXPERIMENTAL)
+    <*> USB Human Interface Device (full HID) support
+    [*]   HID input layer support
+    [*] USB Monitor
+
+
+Keyboard Configuration
+======================
+"You may not need any operating system support at all to use a USB keyboard 
+if you have a PC architecture. There are several BIOS available where the 
+BIOS can provide USB support from a keyboard plugged into the root hub on 
+the motherboard. This may or may not work through other hubs and does not 
+normally work with add-in boards, so you might want to add in support 
+anyway. You definately want to add keyboard support if you add any 
+operating system support, as the Linux USB support will disable the BIOS 
+support. You also need to use Linux USB keyboard support if you want to 
+use any of the "multimedia" types keys that are provided with some USB 
+keybords.
+
+In the kernel configuration stage, you need to turn on USB Human 
+Interface Device (HID) support in USB support and Keyboard support in 
+Input core support. Do not turn on USB HIDBP Keyboard support. Perform
+ the normal kernel rebuild and installation steps. If you are installing 
+as modules, you need to load the hid.o, input.o and keybdev.o modules.
+
+Check the kernel logs to ensure that your keyboard is being correctly
+ sensed by the kernel.
+
+At this point, you should be able to use your USB keyboard as a normal 
+keyboard. Be aware that LILO is not USB aware, and that unless your BIOS 
+supports a USB keyboard, you may not be able to select a non-default boot 
+image using the USB keyboard. I have personally used only a USB keyboard 
+(and USB mouse) and have experienced no problems."
+
+from: linux-usb.org
+
+list devices:
+=============
+Enable this option to see your USB devices in /proc/bus/usb.
+USB support  ---> 
+  [*]   USB device filesystem
+
+
+HID support
+===========
+You have to select HID input support if you have a USB keyboard,
+mouse, joystick or any other USB input device)
+--- USB Input Devices
+<*> USB Human Interface Device (full HID) support
+ [*]   HID input layer support
+
+
+It looks like linux 2.4 had Input core support.  Think it is lacking
+from linux 2.6.x kernels.
+
+Code Listing 2.4: make menuconfig options for 2.4 kernels
+(This immediate config is only for those who have USB input devices.
+Input core support is needed by USB HID later.)
+Input core support  --->
+   <*> Input core support
+   < >   Keyboard support
+   < >   Mouse support
+   < >   Event interface support
+from: gentoo.org
+
+dmesg
+=====
+malachite:~/docs/debian/docs# dmesg | grep input
+drivers/usb/input/hid-core.c: v2.6:USB HID core driver
+input: ImPS/2 Logitech Wheel Mouse as /class/input/input0
+input: AT Translated Set 2 keyboard as /class/input/input1
+
+Should see something like:
+input: USB HID v1.00 Keyboard [Chicony  PFU-65 USB Keyboard] on usb-0000:00:10.0-2.1
+
+from: http://slackworld.berlios.de/01/hhkb.html
+
+The Logitech mouse (working) is attached to a D-Link USB card:
+  model: DU-520, USB 2.0, PCI, chipset: NEC D720101GJ, 
+  S/N: BQ0525A000522, H/W Ver.: A2.
+
+
+lspci
+=====
+lspci -v | grep USB
+0000:00:04.0 USB Controller: NEC Corporation USB (rev 43) (prog-if 10 [OHCI])
+0000:00:04.1 USB Controller: NEC Corporation USB (rev 43) (prog-if 10 [OHCI])
+0000:00:04.2 USB Controller: NEC Corporation USB 2.0 (rev 04) (prog-if 20 [EHCI])
+0000:00:0f.2 USB Controller: ServerWorks OSB4/CSB5 OHCI USB Controller (rev 04) (prog-if 10 [OHCI])
+        Subsystem: ServerWorks OSB4/CSB5 OHCI USB Controller
+
+
+list usb devices
+================
+# lsusb          (uses /proc/bus/usb)
+(This is the 512 MB Memory Stick from Transcend)
+Bus 001 Device 003: ID 0c76:0005 JMTek, LLC. USBdisk
+(This is the Optical Mouse)
+Bus 001 Device 002: ID 046d:c00e Logitech, Inc. Optical Mouse
+(This is the root hub)
+Bus 001 Device 001: ID 0000:0000
+from: gentoo.org
+
+Contacts:
+========
+Jason Guild          267-2120 (work)   jason_guild@fishgame.state.ak.us
+                     522-2753 (home)   fan info, for Jason
+                                       UAA: asjag11@uaa.alaska.edu
+
+Links:
+=====
+USB Human Interface Device (HID) Configuration
+http://www.linux-usb.org/USB-guide/x194.html
+
+The Linux USB sub-system
+Chapter 2. How to get USB devices working under Linux
+USB Human Interface Device (HID) Configuration
+  http://www.linux-usb.org/USB-guide/x194.html
+
+Gentoo Linux USB Guide
+Nice display of 2.6 kernel options.
+http://www.gentoo.org/doc/en/usb-guide.xml
+
+Usb Device Drivers
+Some other interestinf USB links.
+http://www.linux.it/~rubini/docs/usb/usb.html
+
+Happy Hacking Keyboard Lite 2
+UNIX keyboards done the right way
+Author: Daniel de Kok
+Good info the Happy Hacking Keyboard Lite 2
+http://slackworld.berlios.de/01/hhkb.html
+
+Boot loader problems... USB keyboard doesn't work
+"I enabled Legacy USB support in my BIOS and now everything's working great!"
+http://www.linuxforums.org/forum/installation/31216-boot-loader-problems-usb-keyboard-doesnt-work.html
+
