@@ -29,4 +29,10 @@ usb-key.txt
   USB key notes
 
 usb-mass-storage.txt
+  With the purchase of an AcomData 509 series external
+  hard drive case I'm checking out how to mount
+  a 120GB WD1200JB drive via USB. Think this is cracking
+  the USB Mass Storage Device (MSD) nut for Linux.
+
 usb-mouse.txt
+  USB Mouse
