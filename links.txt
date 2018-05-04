@@ -14,6 +14,12 @@ price: $414.99
 This looks pretty nice.  Has keypad for pin.
 https://www.cdw.com/shop/products/Apricorn-Aegis-Secure-Key-3.0-USB-flash-drive-480-GB/3976338.aspx?cm_cat=GoogleBase&cm_ite=3976338&cm_pla=NA-NA-APR_DR&cm_ven=acquirgy&ef_id=WCzqkQAAAbUlfuFq:20170426222052:s&gclid=Cj0KEQjwioHIBRCes6nP56Ti1IsBEiQAxxb5G60kqhrvz_QpGTkBEeXVHuJNuMQByb_Mrj0Z0d5BSUMaAi1H8P8HAQ&s_kwcid=AL!4223!3!192619361664!!!g!52147555374!
 
+Automount USB drives with systemd
+On inserting an USB drive, automounts the drive at /media/
+as a directory named by device label; just the device name
+if label is empty: /media/usbtest, /media/sdd
+https://github.com/raamsri/automount-usb
+
 How do I partition a USB drive so that it's bootable and has a
 Windows-compatible data storage partition?
 http://unix.stackexchange.com/questions/30322/how-do-i-partition-a-usb-drive-so-that-its-bootable-and-has-a-windows-compatibl
