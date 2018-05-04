@@ -1,0 +1,43 @@
+uuid.txt
+Created Fri May  4 08:01:49 AKDT 2018
+Copyright (C) 2017 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+Using UUID
+
+
+Linux prefers to use UUID (Universally Unique Identifier),
+LABEL, or symlinks to identify media storage devices on a
+system. Using device assignments (like /dev/hd*# or /dev/sd*#)
+is not preferred since these can change between system boots:
+
+1. all filesystems should be specified by UUID=<id> or
+   LABEL=<name> for each partition.
+
+2. all physical devices should be specified by a symlink, like
+/dev/cdrom for a cd drive and /dev/disk/by-id/... for each
+physical hard drive.
+
+The files for which UUID is most critical:
+
+1. /boot/grub/menu.lst
+
+2. /etc/fstab
+
+3. /etc/initramfs-tools/conf.d/resume
+--help.ubuntu.com/community/UsingUUID
+
+
+Using LABEL
+===========
+Labels can be very useful for external media, like flash
+drives and USB hard drives since these are generally
+automounted by hal (Hardware Abstraction Layer).  If a
+device has a label, it will be mounted at the /media/<label>
+location and appear with the label on the desktop. 
+
+
+Links
+=====
+Using UUID
+https://help.ubuntu.com/community/UsingUUID
