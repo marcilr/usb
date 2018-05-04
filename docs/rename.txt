@@ -23,6 +23,20 @@ or use blkid:
 # blkid
 
 
+Using the Command line
+======================
+There are at least 6 separate command line tools used to label
+a partition - the program used depends on the partition's
+filesystem type:
+
+1. For FAT16 and FAT32 partitions, use mlabel from the mtools package.
+2. For NTFS partitions, use ntfslabel from the ntfs-3g package.
+3. For ext2, ext3, or ext4 partitions, use e2label.
+4. For JFS partitions, use jfs_tune.
+5. For ReiserFS (v3) partitions, use reiserfstune.
+6. For XFS partitions, use xfs_admin
+--help.ubuntu.com/community/RenameUSBDrive
+
 
 Using the Partition Editor
 ==========================
