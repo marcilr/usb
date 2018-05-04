@@ -20,14 +20,28 @@ as a directory named by device label; just the device name
 if label is empty: /media/usbtest, /media/sdd
 https://github.com/raamsri/automount-usb
 
+Automount USB stick to same mount point, always
+September 23rd, 2009
+https://ubuntuforums.org/showthread.php?t=1273507
+
 Changing the UUID of a FAT32 or NTFS Partition
 This is definitely a bit complicated.
 This really needs to be integrated into a program.
 https://ubuntuforums.org/showthread.php?t=1240146
 
+How do I change UUID of a disk to whatever I want?
+https://askubuntu.com/questions/132079/how-do-i-change-uuid-of-a-disk-to-whatever-i-want?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+
 How do I partition a USB drive so that it's bootable and has a
 Windows-compatible data storage partition?
 http://unix.stackexchange.com/questions/30322/how-do-i-partition-a-usb-drive-so-that-its-bootable-and-has-a-windows-compatibl
+
+How to Change the UUID of a Linux Partition
+http://www.sudo-juice.com/how-to-change-the-uuid-of-a-linux-partition/
+
+Howto mount USB drive in Linux
+Lubos Rendek - 22 March 2013
+https://linuxconfig.org/howto-mount-usb-drive-in-linux
 
 Mounting usb automatically & having usb's label as mountpoint   <===
 Has some great details on udev and scripts to automount.
@@ -49,6 +63,12 @@ host devices from PCs to smartphones.  The drives come with up to
 compatible with mobile devices.
 http://www.anandtech.com/show/11671/silicon-power-launches-mobile-c50-usb-drive-with-usb-typea-microb-and-typec
 https://www.theverge.com/circuitbreaker/2017/7/28/16055780/silicon-power-mobile-c50-flash-drive-usb-a-c-micro-all-in-one
+
+tune2fs still shows “Bad magic number in super-block” even after
+filesystem errors are corrected using fsck
+In my case this error results from using tune2fs on a file sytem
+that it does not support like exFAT. (rem Matry 4, 2018)
+https://unix.stackexchange.com/questions/322046/tune2fs-still-shows-bad-magic-number-in-super-block-even-after-filesystem-erro
 
 USB Type-C and Thunderbolt 3: One port to connect them all
 https://www.cnet.com/how-to/usb-type-c-thunderbolt-3-one-cable-to-connect-them-all/
