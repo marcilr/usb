@@ -20,9 +20,19 @@ as a directory named by device label; just the device name
 if label is empty: /media/usbtest, /media/sdd
 https://github.com/raamsri/automount-usb
 
+Changing the UUID of a FAT32 or NTFS Partition
+This is definitely a bit complicated.
+This really needs to be integrated into a program.
+https://ubuntuforums.org/showthread.php?t=1240146
+
 How do I partition a USB drive so that it's bootable and has a
 Windows-compatible data storage partition?
 http://unix.stackexchange.com/questions/30322/how-do-i-partition-a-usb-drive-so-that-its-bootable-and-has-a-windows-compatibl
+
+Mounting usb automatically & having usb's label as mountpoint   <===
+Has some great details on udev and scripts to automount.
+Need to mirror this.
+https://unix.stackexchange.com/questions/119973/mounting-usb-automatically-having-usbs-label-as-mountpoint?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 
 RenameUSBDrive
 ubuntu documentation
