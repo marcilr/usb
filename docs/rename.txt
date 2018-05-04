@@ -14,10 +14,14 @@ Plug in your USB device and list your partitions with:
 You can also list your mounted devices and their descriptions with:
 # mount
 
-Or use parted:
+or use parted:
 # parted -l
 
 --ubuntu.com
+
+or use blkid:
+# blkid
+
 
 
 Using the Partition Editor
