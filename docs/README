@@ -36,3 +36,8 @@ usb-mass-storage.txt
 
 usb-mouse.txt
   USB Mouse
+
+uuid.txt
+  Using UUID
+  https://help.ubuntu.com/community/UsingUUID
+
