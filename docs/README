@@ -24,6 +24,8 @@ usb-keyboard.txt
 usb-key-rename.txt
   Rename USB drive
 
+usb-50-50-ext4-exFAT.txt
+  Partition USB 50/50 with ext4 and exFAT
 
 usb-key.txt
   USB key notes
