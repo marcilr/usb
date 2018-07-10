@@ -4,3 +4,16 @@ Copyright (C) 2017 by Raymond E. Marcil <marcilr@gmail.com>
 
 
 USB
+
+
+USB 2.0: 480Mbps
+USB 3.0:  5Gbps
+USB 3.1: 10Gbps
+--www.sunix.com/en/product_detail.php?cid=2&kid=34&gid=103&pid=1790
+
+
+Links
+=====
+Supports YSB 3.1 SuperSpeed+ 10Gbps
+By using a PCI Express Generation3 slot
+http://www.sunix.com/en/product_detail.php?cid=2&kid=34&gid=103&pid=1790
