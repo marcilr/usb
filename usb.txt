@@ -29,7 +29,11 @@ covellite#
 
 Granted not showing my Sandisk 64GB Type-c usb key
 
+List block devices even if not mounted:
+  blkid -c /dev/null
+
 --superuser.com/questions/361885/how-do-i-figure-out-which-dev-is-a-usb-flash-drive
+
 
 
 Links
