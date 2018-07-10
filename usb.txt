@@ -12,8 +12,24 @@ USB 3.1: 10Gbps
 --www.sunix.com/en/product_detail.php?cid=2&kid=34&gid=103&pid=1790
 
 
+Inspect usb storage
+===================
+ovellite# ls /dev/disk/by-id/usb-*
+/dev/disk/by-id/usb-SanDisk_Cruzer_Glide_3.0_4C530001080921109230-0:0
+/dev/disk/by-id/usb-SanDisk_Cruzer_Glide_3.0_4C530001080921109230-0:0-part1
+/dev/disk/by-id/usb-SanDisk_Cruzer_Glide_3.0_4C530001080921109230-0:0-part2
+covellite# 
+
+Granted not showing my Sandisk 64GB Type-c usb key
+
+--superuser.com/questions/361885/how-do-i-figure-out-which-dev-is-a-usb-flash-drive
+
+
 Links
 =====
+How do I figure out which /dev is a USB flash drive?
+https://superuser.com/questions/361885/how-do-i-figure-out-which-dev-is-a-usb-flash-drive
+
 Supports YSB 3.1 SuperSpeed+ 10Gbps
 By using a PCI Express Generation3 slot
 http://www.sunix.com/en/product_detail.php?cid=2&kid=34&gid=103&pid=1790
