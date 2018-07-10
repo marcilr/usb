@@ -39,6 +39,9 @@ http://unix.stackexchange.com/questions/30322/how-do-i-partition-a-usb-drive-so-
 How to Change the UUID of a Linux Partition
 http://www.sudo-juice.com/how-to-change-the-uuid-of-a-linux-partition/
 
+HOWTO: Install Debian Linux on a USB Key
+https://fieldeffect.info/wp/frontpage/macbookprousb/
+
 Howto mount USB drive in Linux
 Lubos Rendek - 22 March 2013
 https://linuxconfig.org/howto-mount-usb-drive-in-linux
