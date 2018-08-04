@@ -29,6 +29,11 @@ This is definitely a bit complicated.
 This really needs to be integrated into a program.
 https://ubuntuforums.org/showthread.php?t=1240146
 
+Corsair 256GB Survivor USB 3.0 Flash Drive (CMFSV3B-256GB)
+16GB-256GB
+Waterproof aluminum housing looks indestructable.
+https://www.newegg.com/Product/Product.aspx?item=N82E16820233848
+
 How do I change UUID of a disk to whatever I want?
 https://askubuntu.com/questions/132079/how-do-i-change-uuid-of-a-disk-to-whatever-i-want?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 
@@ -46,6 +51,12 @@ Howto mount USB drive in Linux
 Lubos Rendek - 22 March 2013
 https://linuxconfig.org/howto-mount-usb-drive-in-linux
 
+Keathy 32GB USB 2.0 Flash Drive
+Metal Waterproof Thumb Drive Memory Stick Silver
+Very nice but only 32GB
+price: $7.99 (Amazon prime - August 3, 2018)  <=== Cheap!
+https://www.amazon.com/dp/B077SYWDSP/ref=psdc_3151491_rv_t1_B017DH3NOW
+
 Mounting usb automatically & having usb's label as mountpoint   <===
 Has some great details on udev and scripts to automount.
 Need to mirror this.
@@ -54,6 +65,12 @@ https://unix.stackexchange.com/questions/119973/mounting-usb-automatically-havin
 RenameUSBDrive
 ubuntu documentation
 https://help.ubuntu.com/community/RenameUSBDrive
+
+Samsung 128GB BAR (METAL) USB 3.0 Flash Drive (MUF-128BA/AM)
+Metal waterproof, fine keychain mount, very nice.
+32GB-128GB
+price: $49.80 (amazon - August 3, 2018)
+https://www.amazon.com/Samsung-METAL-Flash-MUF-64BA-AM/dp/B017DH3NOW/ref=pd_sbs_147_5?_encoding=UTF8&pd_rd_i=B013CCTJKE&pd_rd_r=FGZWC2B0Y9PMWY83D795&pd_rd_w=yaZi6&pd_rd_wg=geoYD&refRID=FGZWC2B0Y9PMWY83D795&th=1
 
 Silicon Power Launches Mobile C50 USB Drive with USB Type-A, Micro-B and Type-C
 by Anton Shilov on July 27, 2017 5:00 PM EST
