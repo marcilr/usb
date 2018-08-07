@@ -1,0 +1,13 @@
+# .gitignore
+# Created Mon Aug  6 16:33:48 AKDT 2018
+# Copyright (C)by Raymond E. Marcil <marcilr@gmail.com>
+#
+# Links
+# =====
+# gitignore - Specifies intentionally untracked files to ignore
+# https://git-scm.com/docs/gitignore
+#
+.gitignore
+
+sandisk/*
+sunix/*
