@@ -1,6 +1,6 @@
 # manifest
 # Created Fri Mar  2 09:04:58 AKST 2018
-# Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+# Copyright (C) 2016-2019 by Raymond E. Marcil <marcilr@gmail.com>
 #
 # Manifest for resync application
 #
@@ -28,5 +28,6 @@
 # USB
 #
 # =====================================================================
-ssh://git@github.com/marcilr/sandisk-usb   sandisk
-ssh://git@github.com/marcilr/sunix         sunix
+ssh://git@github.com/marcilr/sandisk-usb.git    sandisk
+ssh://git@github.com/marcilr/sunix.git          sunix
+ssh://git@github.com/marcilr/usb3-to-sata.git   usb3-to-sata
