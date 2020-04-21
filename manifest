@@ -28,6 +28,7 @@
 # USB
 #
 # =====================================================================
+ssh://git@github.com/marcilr/dynadock.git       dynadock
 ssh://git@github.com/marcilr/sandisk-usb.git    sandisk
 ssh://git@github.com/marcilr/sunix.git          sunix
 ssh://git@github.com/marcilr/usb3-to-sata.git   usb3-to-sata
